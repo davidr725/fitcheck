@@ -7,7 +7,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>FitCheck</title>
     <style>
-        /* --- Basic Setup & Theming (Light Mode) --- */
         :root {
             --bg-color: #f0f0f5;
             --primary-card-color: #ffffff;
@@ -27,10 +26,9 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: var(--font-family);
-            overscroll-behavior: none; /* Prevents pull-to-refresh */
+            overscroll-behavior: none;
         }
 
-        /* --- Main App Layout --- */
         #app-container {
             display: flex;
             flex-direction: column;
@@ -39,14 +37,45 @@
             margin: 0 auto;
             background-color: var(--bg-color);
         }
+        
+        #view-switcher-container {
+            padding: 15px;
+            background-color: var(--bg-color);
+        }
+
+        .view-switcher {
+            display: flex;
+            background-color: var(--secondary-card-color);
+            border-radius: 8px;
+            padding: 3px;
+            width: 100%;
+        }
+
+        .view-switcher button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            background-color: transparent;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted-color);
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .view-switcher button.active {
+            background-color: var(--primary-card-color);
+            color: var(--text-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
 
         #content-area {
             flex-grow: 1;
             overflow-y: auto;
-            padding: 20px 15px 100px 15px; /* Padding at bottom for tab bar */
+            padding: 0 15px 100px 15px;
         }
 
-        /* --- Tab Bar Navigation --- */
         #tab-bar {
             display: flex;
             position: fixed;
@@ -55,8 +84,8 @@
             right: 0;
             max-width: 600px;
             margin: 0 auto;
-            height: 85px; /* Taller for iPhone home bar */
-            background-color: rgba(249, 249, 249, 0.85); /* Translucent background */
+            height: 85px;
+            background-color: rgba(249, 249, 249, 0.85);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border-top: 1px solid var(--border-color);
@@ -70,12 +99,10 @@
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            padding-bottom: 25px; /* Space for text below icon */
+            padding-bottom: 25px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: color 0.2s ease;
         }
         
         .tab-button.active {
@@ -83,25 +110,11 @@
             font-weight: 600;
         }
 
-        /* --- Content Area Styling --- */
-        .day-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
+        .day-header { text-align: center; margin-bottom: 25px; margin-top: 10px; }
+        .day-header h1 { margin: 0; font-size: 28px; font-weight: 700; }
+        .day-header p { margin: 5px 0 0 0; color: var(--text-muted-color); font-size: 14px; }
 
-        .day-header h1 {
-            margin: 0;
-            font-size: 28px;
-            font-weight: 700;
-        }
-
-        .day-header p {
-            margin: 5px 0 0 0;
-            color: var(--text-muted-color);
-            font-size: 14px;
-        }
-
-        .exercise-card {
+        .exercise-card, .diet-card {
             background-color: var(--primary-card-color);
             border-radius: 12px;
             padding: 15px;
@@ -109,17 +122,9 @@
             border: 1px solid var(--border-color);
         }
         
-        .exercise-card h2 {
-            margin: 0 0 15px 0;
-            font-size: 18px;
-            font-weight: 600;
-        }
-        
-        .sets-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+        .exercise-card h2, .diet-card h2 { margin: 0 0 15px 0; font-size: 18px; font-weight: 600; }
+        .diet-card h3 { font-size: 16px; margin: 15px 0 10px 0; }
+        .sets-container { display: flex; flex-wrap: wrap; gap: 10px; }
 
         .set-label {
             display: flex;
@@ -130,209 +135,132 @@
             cursor: pointer;
             flex-grow: 1;
             justify-content: center;
-            transition: background-color 0.2s ease;
         }
 
-        .set-label input[type="checkbox"] {
-            display: none; /* Hide the actual checkbox */
-        }
-        
+        .set-label input[type="checkbox"] { display: none; }
         .set-label .custom-checkbox {
-            width: 18px;
-            height: 18px;
-            background-color: #c7c7cc;
-            border-radius: 50%;
-            margin-right: 10px;
-            display: inline-block;
-            transition: background-color 0.2s ease, border 0.2s ease;
-            border: 2px solid #c7c7cc;
-            position: relative;
+            width: 18px; height: 18px; background-color: #c7c7cc;
+            border-radius: 50%; margin-right: 10px; display: inline-block;
+            border: 2px solid #c7c7cc; position: relative;
         }
-
         .set-label input[type="checkbox"]:checked + .custom-checkbox {
-            background-color: var(--accent-color);
-            border: 2px solid var(--accent-color);
+            background-color: var(--accent-color); border: 2px solid var(--accent-color);
         }
-        
         .set-label input[type="checkbox"]:checked + .custom-checkbox::after {
-            content: '✔';
-            color: white;
-            font-size: 12px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
+            content: '✔'; color: white; font-size: 12px;
+            position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
         }
 
-        /* --- Reset Button --- */
-        #reset-button {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background-color: var(--secondary-card-color);
-            color: var(--accent-color);
-            border: 1px solid var(--accent-color-dimmed);
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 30px;
+        .reset-button, #export-button {
+            display: block; width: 100%; padding: 15px;
+            background-color: var(--secondary-card-color); color: var(--accent-color);
+            border: 1px solid var(--accent-color-dimmed); border-radius: 12px;
+            font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 15px;
+        }
+        
+        #export-button {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .rest-day-message {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-muted-color);
         }
     </style>
 </head>
 <body>
-
     <div id="app-container">
+        <div id="view-switcher-container"></div>
         <main id="content-area"></main>
         <nav id="tab-bar"></nav>
     </div>
 
     <script>
         // --- DATA ---
-        // This data is parsed from your Fitness CSV file.
-        // You can edit this directly in the future to change your workouts.
         const workoutData = [
-            {
-                day: "Mon",
-                title: "Upper Body-Strength",
-                rest: "180-300s rest",
-                intensity: "3-4 reps max",
-                exercises: [
-                    { name: "Barbell bench press", sets: 4 },
-                    { name: "Lat pulldown", sets: 4 },
-                    { name: "Chest press machines", sets: 4 },
-                    { name: "Cable row", sets: 4 },
-                    { name: "Dumbbell shoulder press", sets: 4 },
-                    { name: "Leg raises", sets: 3 },
-                    { name: "Planks", sets: 3 },
-                    { name: "Cardio (20 mins)", sets: 1 }
-                ]
-            },
-            {
-                day: "Tue",
-                title: "Lower Body-Strength",
-                rest: "180-300s rest",
-                intensity: "3-4 reps max",
-                exercises: [
-                    { name: "Barbell back squat", sets: 4 },
-                    { name: "Barbell regular deadlift", sets: 4 },
-                    { name: "Leg press", sets: 4 },
-                    { name: "Sit ups", sets: 4 },
-                    { name: "Leg Raises", sets: 4 },
-                    { name: "Cardio (20 mins)", sets: 1 }
-                ]
-            },
-            {
-                day: "Wed",
-                title: "Arms + Functional",
-                rest: "90-180s rest",
-                intensity: "10-12 reps",
-                exercises: [
-                    { name: "Overhead Press", sets: 3 },
-                    { name: "Bicep curls", sets: 3 },
-                    { name: "Overhead tricep extensions", sets: 3 },
-                    { name: "Kettlebell swings", sets: 3 },
-                    { name: "Landmine press", sets: 3 },
-                    { name: "Landmine rotations", sets: 3 },
-                    { name: "Leg raises", sets: 3 },
-                    { name: "Planks", sets: 3 },
-                    { name: "Cardio (20 mins)", sets: 1 }
-                ]
-            },
-            {
-                day: "Thu",
-                title: "Full-Body-Strength",
-                rest: "180-300s rest",
-                intensity: "3-4 reps max",
-                exercises: [
-                    { name: "Barbell back squat", sets: 4 },
-                    { name: "Barbell bench press", sets: 4 },
-                    { name: "Lat pulldown", sets: 4 },
-                    { name: "Barbell regular deadlift", sets: 4 },
-                    { name: "Cable row", sets: 4 },
-                    { name: "Leg raises", sets: 3 },
-                    { name: "Planks", sets: 3 },
-                    { name: "Cardio (20 mins)", sets: 1 }
-                ]
-            },
-            {
-                day: "Fri",
-                title: "Full-Body-Endurance",
-                rest: "90-180s rest",
-                intensity: "12-15 reps",
-                exercises: [
-                    { name: "Bench press", sets: 3 },
-                    { name: "Squats", sets: 3 },
-                    { name: "Deadlifts", sets: 3 },
-                    { name: "Dumbbell rows", sets: 3 },
-                    { name: "Dumbbell shoulder press", sets: 3 },
-                    { name: "Leg raises", sets: 3 },
-                    { name: "Planks", sets: 3 },
-                    { name: "Cardio (20 mins)", sets: 1 }
-                ]
-            }
+            { day: "Sun", title: "Rest Day", exercises: [] },
+            { day: "Mon", title: "Upper Body-Strength", rest: "180-300s rest", intensity: "3-4 reps max", exercises: [ { name: "Barbell bench press", sets: 4 }, { name: "Lat pulldown", sets: 4 }, { name: "Chest press machines", sets: 4 }, { name: "Cable row", sets: 4 }, { name: "Dumbbell shoulder press", sets: 4 }, { name: "Leg raises", sets: 3 }, { name: "Planks", sets: 3 }, { name: "Cardio (20 mins)", sets: 1 } ] }, 
+            { day: "Tue", title: "Lower Body-Strength", rest: "180-300s rest", intensity: "3-4 reps max", exercises: [ { name: "Barbell back squat", sets: 4 }, { name: "Barbell regular deadlift", sets: 4 }, { name: "Leg press", sets: 4 }, { name: "Sit ups", sets: 4 }, { name: "Leg Raises", sets: 4 }, { name: "Cardio (20 mins)", sets: 1 } ] }, 
+            { day: "Wed", title: "Arms + Functional", rest: "90-180s rest", intensity: "10-12 reps", exercises: [ { name: "Overhead Press", sets: 3 }, { name: "Bicep curls", sets: 3 }, { name: "Overhead tricep extensions", sets: 3 }, { name: "Kettlebell swings", sets: 3 }, { name: "Landmine press", sets: 3 }, { name: "Landmine rotations", sets: 3 }, { name: "Leg raises", sets: 3 }, { name: "Planks", sets: 3 }, { name: "Cardio (20 mins)", sets: 1 } ] }, 
+            { day: "Thu", title: "Full-Body-Strength", rest: "180-300s rest", intensity: "3-4 reps max", exercises: [ { name: "Barbell back squat", sets: 4 }, { name: "Barbell bench press", sets: 4 }, { name: "Lat pulldown", sets: 4 }, { name: "Barbell regular deadlift", sets: 4 }, { name: "Cable row", sets: 4 }, { name: "Leg raises", sets: 3 }, { name: "Planks", sets: 3 }, { name: "Cardio (20 mins)", sets: 1 } ] }, 
+            { day: "Fri", title: "Full-Body-Endurance", rest: "90-180s rest", intensity: "12-15 reps", exercises: [ { name: "Bench press", sets: 3 }, { name: "Squats", sets: 3 }, { name: "Deadlifts", sets: 3 }, { name: "Dumbbell rows", sets: 3 }, { name: "Dumbbell shoulder press", sets: 3 }, { name: "Leg raises", sets: 3 }, { name: "Planks", sets: 3 }, { name: "Cardio (20 mins)", sets: 1 } ] },
+            { day: "Sat", title: "Rest Day", exercises: [] }
         ];
+
+        const dietData = {
+            weekly: [
+                { name: "Seafood/Fish", servings: 3 },
+                { name: "Dairy", servings: 4 }
+            ],
+            daily: [
+                { name: "Non-Starchy Veggies", servings: 6 },
+                { name: "Lean Protein", servings: 3 },
+                { name: "Healthy Fats", servings: 3 },
+                { name: "Fiber Carbs (Grains/Legumes)", servings: 2 },
+                { name: "Fruits", servings: 2 },
+                { name: "Nuts/Seeds", servings: 1 }
+            ]
+        };
 
         // --- APPLICATION LOGIC ---
         document.addEventListener('DOMContentLoaded', () => {
             const contentArea = document.getElementById('content-area');
             const tabBar = document.getElementById('tab-bar');
-            let currentDayIndex = 0;
+            const viewSwitcherContainer = document.getElementById('view-switcher-container');
+            
+            let currentDayIndex = new Date().getDay(); // 0 for Sunday, 1 for Monday, etc.
+            let currentView = 'fitness'; // 'fitness' or 'diet'
 
-            // Function to render the content for the selected day
-            function renderDay(dayIndex) {
-                currentDayIndex = dayIndex;
-                const dayData = workoutData[dayIndex];
-                
+            function renderCurrentView() {
+                if (currentView === 'fitness') {
+                    renderFitnessView();
+                } else {
+                    renderDietView();
+                }
+                updateViewSwitcher();
+            }
+
+            function renderFitnessView() {
+                const dayData = workoutData[currentDayIndex];
                 contentArea.innerHTML = '';
 
-                // 1. Create Day Header
                 const header = document.createElement('div');
                 header.className = 'day-header';
-                header.innerHTML = `
-                    <h1>${dayData.title}</h1>
-                    <p>${dayData.rest} &bull; ${dayData.intensity}</p>
-                `;
+                header.innerHTML = `<h1>${dayData.title}</h1>`;
+                if (dayData.rest) {
+                     header.innerHTML += `<p>${dayData.rest} &bull; ${dayData.intensity}</p>`;
+                }
                 contentArea.appendChild(header);
 
-                // 2. Create Exercise Cards
-                dayData.exercises.forEach((exercise, exerciseIndex) => {
+                if (dayData.exercises.length === 0) {
+                    contentArea.innerHTML += `<div class="rest-day-message"><h2>Enjoy your rest day!</h2></div>`;
+                    addExportButton();
+                    return;
+                }
+
+                dayData.exercises.forEach((exercise, exIndex) => {
                     const card = document.createElement('div');
                     card.className = 'exercise-card';
-                    
-                    const title = document.createElement('h2');
-                    title.textContent = exercise.name;
-                    card.appendChild(title);
-
+                    card.innerHTML = `<h2>${exercise.name}</h2>`;
                     const setsContainer = document.createElement('div');
                     setsContainer.className = 'sets-container';
-                    
                     for (let i = 1; i <= exercise.sets; i++) {
-                        const checkboxId = `day${dayIndex}-ex${exerciseIndex}-set${i}`;
+                        const checkboxId = `workout-day${currentDayIndex}-ex${exIndex}-set${i}`;
                         let setName = `Set ${i}`;
-
-                        if (exercise.sets === 1) {
-                            setName = "Done";
-                        } else if (i === 4 && exercise.sets === 4) {
-                            setName = "Burnout";
-                        }
-
+                        if (exercise.sets === 1) setName = "Done";
+                        else if (i === 4 && exercise.sets === 4) setName = "Burnout";
+                        
                         const label = document.createElement('label');
                         label.className = 'set-label';
                         label.htmlFor = checkboxId;
-
                         const checkbox = document.createElement('input');
                         checkbox.type = 'checkbox';
                         checkbox.id = checkboxId;
-                        
-                        if (localStorage.getItem(checkboxId) === 'true') {
-                            checkbox.checked = true;
-                        }
-
-                        checkbox.addEventListener('change', () => {
-                            localStorage.setItem(checkboxId, checkbox.checked);
-                        });
-
+                        if (localStorage.getItem(checkboxId) === 'true') checkbox.checked = true;
+                        checkbox.addEventListener('change', () => localStorage.setItem(checkboxId, checkbox.checked));
                         label.innerHTML = `<span class="custom-checkbox"></span> ${setName}`;
                         label.prepend(checkbox);
                         setsContainer.appendChild(label);
@@ -341,55 +269,247 @@
                     contentArea.appendChild(card);
                 });
 
-                // 3. Create Reset Button
                 const resetButton = document.createElement('button');
-                resetButton.id = 'reset-button';
-                resetButton.textContent = `Reset ${dayData.day}`;
+                resetButton.className = 'reset-button';
+                resetButton.textContent = `Reset ${dayData.day} Workout`;
                 resetButton.addEventListener('click', () => {
-                    if (confirm(`Are you sure you want to reset all checks for ${dayData.day}?`)) {
-                        dayData.exercises.forEach((exercise, exerciseIndex) => {
-                            for (let i = 1; i <= exercise.sets; i++) {
-                                const checkboxId = `day${dayIndex}-ex${exerciseIndex}-set${i}`;
-                                localStorage.removeItem(checkboxId);
-                            }
+                    if (confirm(`Reset workout for ${dayData.day}?`)) {
+                        dayData.exercises.forEach((ex, exIndex) => {
+                            for (let i = 1; i <= ex.sets; i++) localStorage.removeItem(`workout-day${currentDayIndex}-ex${exIndex}-set${i}`);
                         });
-                        renderDay(dayIndex);
+                        renderFitnessView();
                     }
                 });
                 contentArea.appendChild(resetButton);
-
-                updateActiveTab();
+                addExportButton();
             }
 
-            // Function to create tab bar buttons
+            function renderDietView() {
+                contentArea.innerHTML = '';
+                const currentDayName = workoutData[currentDayIndex].day;
+
+                const header = document.createElement('div');
+                header.className = 'day-header';
+                header.innerHTML = `<h1>Diet Checklist</h1><p>${currentDayName}'s Goals</p>`;
+                contentArea.appendChild(header);
+                
+                const dailyCard = document.createElement('div');
+                dailyCard.className = 'diet-card';
+                dailyCard.innerHTML = `<h2>Daily Goals</h2>`;
+                dietData.daily.forEach((item, itemIndex) => {
+                    dailyCard.innerHTML += `<h3>${item.name}</h3>`;
+                    const setsContainer = document.createElement('div');
+                    setsContainer.className = 'sets-container';
+                    for (let i = 1; i <= item.servings; i++) {
+                        const checkboxId = `diet-${currentDayName}-item${itemIndex}-serving${i}`;
+                        const label = document.createElement('label');
+                        label.className = 'set-label';
+                        label.htmlFor = checkboxId;
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = checkboxId;
+                        if (localStorage.getItem(checkboxId) === 'true') checkbox.checked = true;
+                        checkbox.addEventListener('change', () => localStorage.setItem(checkboxId, checkbox.checked));
+                        label.innerHTML = `<span class="custom-checkbox"></span> Serving ${i}`;
+                        label.prepend(checkbox);
+                        setsContainer.appendChild(label);
+                    }
+                    dailyCard.appendChild(setsContainer);
+                });
+                contentArea.appendChild(dailyCard);
+
+                const weeklyCard = document.createElement('div');
+                weeklyCard.className = 'diet-card';
+                weeklyCard.innerHTML = `<h2>Weekly Goals</h2>`;
+                dietData.weekly.forEach((item, itemIndex) => {
+                    weeklyCard.innerHTML += `<h3>${item.name}</h3>`;
+                    const setsContainer = document.createElement('div');
+                    setsContainer.className = 'sets-container';
+                    for (let i = 1; i <= item.servings; i++) {
+                        const checkboxId = `diet-week-item${itemIndex}-serving${i}`;
+                        const label = document.createElement('label');
+                        label.className = 'set-label';
+                        label.htmlFor = checkboxId;
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = checkboxId;
+                        if (localStorage.getItem(checkboxId) === 'true') checkbox.checked = true;
+                        checkbox.addEventListener('change', () => localStorage.setItem(checkboxId, checkbox.checked));
+                        label.innerHTML = `<span class="custom-checkbox"></span> Serving ${i}`;
+                        label.prepend(checkbox);
+                        setsContainer.appendChild(label);
+                    }
+                    weeklyCard.appendChild(setsContainer);
+                });
+                contentArea.appendChild(weeklyCard);
+                
+                const resetDailyButton = document.createElement('button');
+                resetDailyButton.className = 'reset-button';
+                resetDailyButton.textContent = `Reset ${currentDayName}'s Diet`;
+                resetDailyButton.addEventListener('click', () => {
+                     if (confirm(`Reset diet for ${currentDayName}?`)) {
+                        dietData.daily.forEach((item, itemIndex) => {
+                            for (let i = 1; i <= item.servings; i++) localStorage.removeItem(`diet-${currentDayName}-item${itemIndex}-serving${i}`);
+                        });
+                        renderDietView();
+                    }
+                });
+                contentArea.appendChild(resetDailyButton);
+
+                const resetWeeklyButton = document.createElement('button');
+                resetWeeklyButton.className = 'reset-button';
+                resetWeeklyButton.textContent = `Reset Weekly Diet`;
+                resetWeeklyButton.addEventListener('click', () => {
+                     if (confirm(`Reset all weekly diet goals?`)) {
+                        dietData.weekly.forEach((item, itemIndex) => {
+                            for (let i = 1; i <= item.servings; i++) localStorage.removeItem(`diet-week-item${itemIndex}-serving${i}`);
+                        });
+                        renderDietView();
+                    }
+                });
+                contentArea.appendChild(resetWeeklyButton);
+                addExportButton();
+            }
+            
+            function addExportButton() {
+                const exportButton = document.createElement('button');
+                exportButton.id = 'export-button';
+                exportButton.textContent = 'Export Week to CSV';
+                exportButton.addEventListener('click', exportDataToCSV);
+                contentArea.appendChild(exportButton);
+            }
+
+            function exportDataToCSV() {
+                const weeklySummary = {};
+
+                // --- 1. Calculate All Targets ---
+                workoutData.forEach(dayData => {
+                    dayData.exercises.forEach(ex => {
+                        const key = `Fitness_${ex.name}`;
+                        if (!weeklySummary[key]) {
+                            weeklySummary[key] = { category: 'Fitness', item: ex.name, target: 0, actual: 0 };
+                        }
+                        weeklySummary[key].target += ex.sets;
+                    });
+                });
+
+                dietData.daily.forEach(item => {
+                    const key = `Diet_${item.name}`;
+                    weeklySummary[key] = { category: 'Diet', item: item.name, target: item.servings * 7, actual: 0 };
+                });
+
+                dietData.weekly.forEach(item => {
+                    const key = `Diet_${item.name}`;
+                    weeklySummary[key] = { category: 'Diet', item: item.name, target: item.servings, actual: 0 };
+                });
+
+                // --- 2. Calculate Actuals from localStorage ---
+                for (let i = 0; i < 7; i++) { // Loop through Sun to Sat
+                    const dayData = workoutData[i];
+                    const dayName = dayData.day;
+
+                    dayData.exercises.forEach((ex, exIndex) => {
+                        const key = `Fitness_${ex.name}`;
+                        for (let s = 1; s <= ex.sets; s++) {
+                            if (localStorage.getItem(`workout-day${i}-ex${exIndex}-set${s}`) === 'true') {
+                                if (weeklySummary[key]) weeklySummary[key].actual++;
+                            }
+                        }
+                    });
+
+                    dietData.daily.forEach((item, itemIndex) => {
+                        const key = `Diet_${item.name}`;
+                        for (let s = 1; s <= item.servings; s++) {
+                            if (localStorage.getItem(`diet-${dayName}-item${itemIndex}-serving${s}`) === 'true') {
+                                if (weeklySummary[key]) weeklySummary[key].actual++;
+                            }
+                        }
+                    });
+                }
+
+                dietData.weekly.forEach((item, itemIndex) => {
+                    const key = `Diet_${item.name}`;
+                    for (let s = 1; s <= item.servings; s++) {
+                        if (localStorage.getItem(`diet-week-item${itemIndex}-serving${s}`) === 'true') {
+                           if (weeklySummary[key]) weeklySummary[key].actual++;
+                        }
+                    }
+                });
+
+                // --- 3. Format and Download CSV ---
+                const today = new Date();
+                const dayOfWeek = today.getDay();
+                const weekStartDate = new Date(today);
+                weekStartDate.setDate(today.getDate() - dayOfWeek);
+                const weekString = `Week of ${weekStartDate.toISOString().split('T')[0]}`;
+
+                let csvContent = "data:text/csv;charset=utf-8,";
+                csvContent += "Week,Category,Item,Target,Actual\r\n";
+
+                for (const key in weeklySummary) {
+                    const data = weeklySummary[key];
+                    csvContent += `${weekString},${data.category},"${data.item}",${data.target},${data.actual}\r\n`;
+                }
+                
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", `FitCheck_Export_${weekString}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
             function createTabs() {
                 workoutData.forEach((day, index) => {
                     const button = document.createElement('button');
                     button.className = 'tab-button';
                     button.textContent = day.day;
                     button.dataset.dayIndex = index;
-
                     button.addEventListener('click', () => {
-                        renderDay(index);
+                        currentDayIndex = index;
+                        renderCurrentView();
+                        updateActiveTab();
                     });
                     tabBar.appendChild(button);
                 });
             }
 
+            function createViewSwitcher() {
+                viewSwitcherContainer.innerHTML = `
+                    <div class="view-switcher">
+                        <button id="fitness-tab" class="active">Fitness</button>
+                        <button id="diet-tab">Diet</button>
+                    </div>
+                `;
+                document.getElementById('fitness-tab').addEventListener('click', () => {
+                    currentView = 'fitness';
+                    renderCurrentView();
+                });
+                document.getElementById('diet-tab').addEventListener('click', () => {
+                    currentView = 'diet';
+                    renderCurrentView();
+                });
+            }
+            
+            function updateViewSwitcher() {
+                const fitnessTab = document.getElementById('fitness-tab');
+                const dietTab = document.getElementById('diet-tab');
+                fitnessTab.classList.toggle('active', currentView === 'fitness');
+                dietTab.classList.toggle('active', currentView === 'diet');
+            }
+
             function updateActiveTab() {
-                const buttons = document.querySelectorAll('.tab-button');
-                buttons.forEach((button, index) => {
-                    if (index === currentDayIndex) {
-                        button.classList.add('active');
-                    } else {
-                        button.classList.remove('active');
-                    }
+                document.querySelectorAll('.tab-button').forEach((button, index) => {
+                    button.classList.toggle('active', index === currentDayIndex);
                 });
             }
 
             // Initial setup
             createTabs();
-            renderDay(0); // Start on Monday
+            createViewSwitcher();
+            renderCurrentView();
+            updateActiveTab();
         });
     </script>
 </body>
