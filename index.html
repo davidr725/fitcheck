@@ -273,12 +273,10 @@
                 resetButton.className = 'reset-button';
                 resetButton.textContent = `Reset ${dayData.day} Workout`;
                 resetButton.addEventListener('click', () => {
-                    if (confirm(`Reset workout for ${dayData.day}?`)) {
-                        dayData.exercises.forEach((ex, exIndex) => {
-                            for (let i = 1; i <= ex.sets; i++) localStorage.removeItem(`workout-day${currentDayIndex}-ex${exIndex}-set${i}`);
-                        });
-                        renderFitnessView();
-                    }
+                    dayData.exercises.forEach((ex, exIndex) => {
+                        for (let i = 1; i <= ex.sets; i++) localStorage.removeItem(`workout-day${currentDayIndex}-ex${exIndex}-set${i}`);
+                    });
+                    renderFitnessView();
                 });
                 contentArea.appendChild(resetButton);
                 addExportButton();
@@ -347,12 +345,10 @@
                 resetDailyButton.className = 'reset-button';
                 resetDailyButton.textContent = `Reset ${currentDayName}'s Diet`;
                 resetDailyButton.addEventListener('click', () => {
-                     if (confirm(`Reset diet for ${currentDayName}?`)) {
-                        dietData.daily.forEach((item, itemIndex) => {
-                            for (let i = 1; i <= item.servings; i++) localStorage.removeItem(`diet-${currentDayName}-item${itemIndex}-serving${i}`);
-                        });
-                        renderDietView();
-                    }
+                    dietData.daily.forEach((item, itemIndex) => {
+                        for (let i = 1; i <= item.servings; i++) localStorage.removeItem(`diet-${currentDayName}-item${itemIndex}-serving${i}`);
+                    });
+                    renderDietView();
                 });
                 contentArea.appendChild(resetDailyButton);
 
@@ -360,12 +356,10 @@
                 resetWeeklyButton.className = 'reset-button';
                 resetWeeklyButton.textContent = `Reset Weekly Diet`;
                 resetWeeklyButton.addEventListener('click', () => {
-                     if (confirm(`Reset all weekly diet goals?`)) {
-                        dietData.weekly.forEach((item, itemIndex) => {
-                            for (let i = 1; i <= item.servings; i++) localStorage.removeItem(`diet-week-item${itemIndex}-serving${i}`);
-                        });
-                        renderDietView();
-                    }
+                    dietData.weekly.forEach((item, itemIndex) => {
+                        for (let i = 1; i <= item.servings; i++) localStorage.removeItem(`diet-week-item${itemIndex}-serving${i}`);
+                    });
+                    renderDietView();
                 });
                 contentArea.appendChild(resetWeeklyButton);
                 addExportButton();
