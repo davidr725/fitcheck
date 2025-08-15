@@ -6,6 +6,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>FitCheck</title>
+    <!-- Home Screen Icon -->
+    <link rel="apple-touch-icon" href="https://placehold.co/180x180/007aff/ffffff?text=FC&font=sans-serif">
     <style>
         :root {
             --bg-color: #f0f0f5;
@@ -291,11 +293,18 @@
                 header.innerHTML = `<h1>Diet Checklist</h1><p>${currentDayName}'s Goals</p>`;
                 contentArea.appendChild(header);
                 
+                // --- DAILY GOALS CARD ---
                 const dailyCard = document.createElement('div');
                 dailyCard.className = 'diet-card';
-                dailyCard.innerHTML = `<h2>Daily Goals</h2>`;
+                const dailyTitle = document.createElement('h2');
+                dailyTitle.textContent = 'Daily Goals';
+                dailyCard.appendChild(dailyTitle);
+
                 dietData.daily.forEach((item, itemIndex) => {
-                    dailyCard.innerHTML += `<h3>${item.name}</h3>`;
+                    const itemTitle = document.createElement('h3');
+                    itemTitle.textContent = item.name;
+                    dailyCard.appendChild(itemTitle);
+                    
                     const setsContainer = document.createElement('div');
                     setsContainer.className = 'sets-container';
                     for (let i = 1; i <= item.servings; i++) {
@@ -316,11 +325,18 @@
                 });
                 contentArea.appendChild(dailyCard);
 
+                // --- WEEKLY GOALS CARD ---
                 const weeklyCard = document.createElement('div');
                 weeklyCard.className = 'diet-card';
-                weeklyCard.innerHTML = `<h2>Weekly Goals</h2>`;
+                const weeklyTitle = document.createElement('h2');
+                weeklyTitle.textContent = 'Weekly Goals';
+                weeklyCard.appendChild(weeklyTitle);
+
                 dietData.weekly.forEach((item, itemIndex) => {
-                    weeklyCard.innerHTML += `<h3>${item.name}</h3>`;
+                    const itemTitle = document.createElement('h3');
+                    itemTitle.textContent = item.name;
+                    weeklyCard.appendChild(itemTitle);
+
                     const setsContainer = document.createElement('div');
                     setsContainer.className = 'sets-container';
                     for (let i = 1; i <= item.servings; i++) {
@@ -341,6 +357,7 @@
                 });
                 contentArea.appendChild(weeklyCard);
                 
+                // --- RESET BUTTONS ---
                 const resetDailyButton = document.createElement('button');
                 resetDailyButton.className = 'reset-button';
                 resetDailyButton.textContent = `Reset ${currentDayName}'s Diet`;
