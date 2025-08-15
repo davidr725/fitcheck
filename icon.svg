@@ -2,8 +2,8 @@
   <defs>
     <linearGradient id="appGradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#25d366;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#128c7e;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#075e54;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#25d366;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#128c7e;stop-opacity:1" />
     </linearGradient>
     <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
       <feOffset dx="0" dy="-4"/>
@@ -25,10 +25,10 @@
   
   <!-- Large checkmark -->
   <path d="M120 256l100 100 152-152" 
-        stroke="white" 
-        stroke-width="36" 
+        stroke="#ffffff" 
+        stroke-width="42" 
         stroke-linecap="round" 
         stroke-linejoin="round" 
         fill="none"
-        filter="url(#innerShadow)"/>
+        opacity="1"/>
 </svg>
