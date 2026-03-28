@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head><title>Generate Icon</title></head>
+<body style="background:#222; display:flex; flex-direction:column; align-items:center; padding:40px; font-family:sans-serif; color:white;">
+<h2>Right-click each image and "Save Image As" to get your PNGs</h2>
+<div style="display:flex; gap:40px; margin-top:20px;">
+    <div style="text-align:center;">
+        <canvas id="c192" width="192" height="192"></canvas>
+        <p>192x192</p>
+    </div>
+    <div style="text-align:center;">
+        <canvas id="c512" width="512" height="512"></canvas>
+        <p>512x512</p>
+    </div>
+    <div style="text-align:center;">
+        <canvas id="c180" width="180" height="180"></canvas>
+        <p>180x180 (apple-touch-icon)</p>
+    </div>
+</div>
+<script>
+function drawIcon(ctx, s) {
+    const f = s / 192; // scale factor
+
+    // Background gradient
+    const bg = ctx.createLinearGradient(0, 0, s, s);
+    bg.addColorStop(0, '#1a1a2e');
+    bg.addColorStop(1, '#16213e');
+
+    // Accent gradient
+    const accent = ctx.createLinearGradient(0, 0, s, s);
+    accent.addColorStop(0, '#00b4d8');
+    accent.addColorStop(1, '#0077b6');
+
+    // Rounded rect background
+    const r = 43 * f;
+    ctx.beginPath();
+    ctx.moveTo(r, 0);
+    ctx.lineTo(s - r, 0);
+    ctx.quadraticCurveTo(s, 0, s, r);
+    ctx.lineTo(s, s - r);
+    ctx.quadraticCurveTo(s, s, s - r, s);
+    ctx.lineTo(r, s);
+    ctx.quadraticCurveTo(0, s, 0, s - r);
+    ctx.lineTo(0, r);
+    ctx.quadraticCurveTo(0, 0, r, 0);
+    ctx.closePath();
+    ctx.fillStyle = bg;
+    ctx.fill();
+
+    // Barbell bar
+    roundRect(ctx, 36*f, 90*f, 120*f, 12*f, 6*f);
+    ctx.fillStyle = accent;
+    ctx.globalAlpha = 0.9;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // Left plates
+    roundRect(ctx, 28*f, 70*f, 16*f, 52*f, 4*f);
+    ctx.fillStyle = accent;
+    ctx.fill();
+
+    ctx.globalAlpha = 0.7;
+    roundRect(ctx, 16*f, 78*f, 14*f, 36*f, 3*f);
+    ctx.fillStyle = accent;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // Right plates
+    roundRect(ctx, 148*f, 70*f, 16*f, 52*f, 4*f);
+    ctx.fillStyle = accent;
+    ctx.fill();
+
+    ctx.globalAlpha = 0.7;
+    roundRect(ctx, 162*f, 78*f, 14*f, 36*f, 3*f);
+    ctx.fillStyle = accent;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // Checkmark
+    ctx.beginPath();
+    ctx.moveTo(72*f, 132*f);
+    ctx.lineTo(84*f, 144*f);
+    ctx.lineTo(112*f, 116*f);
+    ctx.strokeStyle = '#34c759';
+    ctx.lineWidth = 7 * f;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+}
+
+[192, 512, 180].forEach(size => {
+    const id = size === 180 ? 'c180' : (size === 192 ? 'c192' : 'c512');
+    const canvas = document.getElementById(id);
+    drawIcon(canvas.getContext('2d'), size);
+
+    // Also show as downloadable image
+    const img = new Image();
+    img.src = canvas.toDataURL('image/png');
+    img.style.cssText = 'width:' + Math.min(size, 192) + 'px; border-radius:20px; margin-top:10px; display:block;';
+    canvas.parentNode.appendChild(img);
+});
+</script>
+</body>
+</html>
