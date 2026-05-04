@@ -15,71 +15,80 @@
 
     // --- Default Program ---
     const DEFAULT_PROGRAM = {
-        name: "Default Program",
+        name: "Bro Split",
         days: [
             {
-                day: "Mon", title: "Upper Strength", rest: "3-5 min", intensity: "3-5 reps",
+                day: "Sun", title: "Rest Day", rest: "—", intensity: "—",
+                exercises: []
+            },
+            {
+                day: "Mon", title: "Chest", rest: "90-180s", intensity: "8-12 reps",
                 exercises: [
-                    { name: "Barbell Bench Press", sets: 4, reps: "3-5", goalLift: "bench" },
-                    { name: "Lat Pulldown", sets: 4, reps: "3-5" },
-                    { name: "Chest Press Machine", sets: 4, reps: "3-5" },
-                    { name: "Cable Row", sets: 4, reps: "3-5" },
-                    { name: "Dumbbell Shoulder Press", sets: 4, reps: "3-5" },
+                    { name: "Bench Press", sets: 4, reps: "8-12", goalLift: "bench" },
+                    { name: "Inclined Bench", sets: 4, reps: "8-12" },
+                    { name: "Decline Bench", sets: 4, reps: "8-12" },
+                    { name: "Chest Press", sets: 4, reps: "8-12" },
                     { name: "Leg Raises", sets: 3, reps: "12-15" },
                     { name: "Planks", sets: 3, reps: "30-60s" },
+                    { name: "Sit Ups", sets: 3, reps: "15-20" },
                     { name: "Cardio", sets: 1, reps: "20 min" }
                 ]
             },
             {
-                day: "Tue", title: "Lower Strength", rest: "3-5 min", intensity: "3-5 reps",
+                day: "Tue", title: "Back", rest: "90-180s", intensity: "8-12 reps",
                 exercises: [
-                    { name: "Barbell Back Squat", sets: 4, reps: "3-5", goalLift: "squat" },
-                    { name: "Barbell Deadlift", sets: 4, reps: "3-5", goalLift: "deadlift" },
-                    { name: "Leg Press", sets: 4, reps: "3-5" },
-                    { name: "Sit Ups", sets: 4, reps: "15-20" },
-                    { name: "Leg Raises", sets: 4, reps: "12-15" },
+                    { name: "Barbell Bent Over Row", sets: 4, reps: "8-12" },
+                    { name: "Lat Pulldown", sets: 4, reps: "8-12" },
+                    { name: "Cable Row", sets: 4, reps: "8-12" },
+                    { name: "Pull Ups (assisted)", sets: 4, reps: "8-12" },
+                    { name: "Leg Raises", sets: 3, reps: "12-15" },
+                    { name: "Planks", sets: 3, reps: "30-60s" },
+                    { name: "Sit Ups", sets: 3, reps: "15-20" },
                     { name: "Cardio", sets: 1, reps: "20 min" }
                 ]
             },
             {
-                day: "Wed", title: "Arms + Functional", rest: "90-180s", intensity: "10-12 reps",
+                day: "Wed", title: "Legs", rest: "3-5 min", intensity: "5-8 reps",
                 exercises: [
-                    { name: "Overhead Press", sets: 3, reps: "10-12", goalLift: "ohp" },
-                    { name: "Bicep Curls", sets: 3, reps: "10-12" },
+                    { name: "Deadlifts", sets: 4, reps: "5-8", goalLift: "deadlift" },
+                    { name: "Barbell Squat", sets: 4, reps: "5-8", goalLift: "squat" },
+                    { name: "Leg Press", sets: 4, reps: "8-12" },
+                    { name: "Leg Raises", sets: 3, reps: "12-15" },
+                    { name: "Planks", sets: 3, reps: "30-60s" },
+                    { name: "Sit Ups", sets: 3, reps: "15-20" },
+                    { name: "Cardio", sets: 1, reps: "20 min" }
+                ]
+            },
+            {
+                day: "Thu", title: "Arms", rest: "60-90s", intensity: "10-12 reps",
+                exercises: [
+                    { name: "Bicep Curls (Dumbbells)", sets: 3, reps: "10-12" },
                     { name: "Overhead Tricep Extensions", sets: 3, reps: "10-12" },
-                    { name: "Kettlebell Swings", sets: 3, reps: "12-15" },
-                    { name: "Landmine Press", sets: 3, reps: "10-12" },
-                    { name: "Landmine Rotations", sets: 3, reps: "10-12" },
+                    { name: "Bicep Curls (Bar)", sets: 3, reps: "10-12" },
+                    { name: "Tricep Pull Downs", sets: 3, reps: "10-12" },
+                    { name: "Dips (assisted)", sets: 3, reps: "8-12" },
                     { name: "Leg Raises", sets: 3, reps: "12-15" },
                     { name: "Planks", sets: 3, reps: "30-60s" },
+                    { name: "Sit Ups", sets: 3, reps: "15-20" },
                     { name: "Cardio", sets: 1, reps: "20 min" }
                 ]
             },
             {
-                day: "Thu", title: "Full Body Strength", rest: "3-5 min", intensity: "3-5 reps",
+                day: "Fri", title: "Shoulders", rest: "90-180s", intensity: "8-12 reps",
                 exercises: [
-                    { name: "Barbell Back Squat", sets: 4, reps: "3-5", goalLift: "squat" },
-                    { name: "Barbell Bench Press", sets: 4, reps: "3-5", goalLift: "bench" },
-                    { name: "Lat Pulldown", sets: 4, reps: "3-5" },
-                    { name: "Barbell Deadlift", sets: 4, reps: "3-5", goalLift: "deadlift" },
-                    { name: "Cable Row", sets: 4, reps: "3-5" },
+                    { name: "Overhead Press", sets: 4, reps: "8-12", goalLift: "ohp" },
+                    { name: "Dumbbell Seated Overhead Press", sets: 4, reps: "8-12" },
+                    { name: "Dumbbell Fly", sets: 4, reps: "10-12" },
+                    { name: "Reverse Fly", sets: 4, reps: "10-12" },
                     { name: "Leg Raises", sets: 3, reps: "12-15" },
                     { name: "Planks", sets: 3, reps: "30-60s" },
+                    { name: "Sit Ups", sets: 3, reps: "15-20" },
                     { name: "Cardio", sets: 1, reps: "20 min" }
                 ]
             },
             {
-                day: "Fri", title: "Full Body Endurance", rest: "90-180s", intensity: "12-15 reps",
-                exercises: [
-                    { name: "Bench Press", sets: 3, reps: "12-15", goalLift: "bench" },
-                    { name: "Squats", sets: 3, reps: "12-15", goalLift: "squat" },
-                    { name: "Deadlifts", sets: 3, reps: "12-15", goalLift: "deadlift" },
-                    { name: "Dumbbell Rows", sets: 3, reps: "12-15" },
-                    { name: "Dumbbell Shoulder Press", sets: 3, reps: "12-15" },
-                    { name: "Leg Raises", sets: 3, reps: "12-15" },
-                    { name: "Planks", sets: 3, reps: "30-60s" },
-                    { name: "Cardio", sets: 1, reps: "20 min" }
-                ]
+                day: "Sat", title: "Rest Day", rest: "—", intensity: "—",
+                exercises: []
             }
         ]
     };
@@ -176,6 +185,15 @@
 
         const day = program.days[selectedDayIndex];
         if (!day) return;
+
+        // Rest day shortcut
+        if (!day.exercises || day.exercises.length === 0) {
+            const rest = document.createElement('div');
+            rest.className = 'rest-day';
+            rest.innerHTML = `<h2>${day.title}</h2><p>Recover and come back stronger.</p>`;
+            content.appendChild(rest);
+            return;
+        }
 
         // Stopwatch
         content.appendChild(buildStopwatch());
